@@ -58,6 +58,7 @@
 			240 241 242 243 244 245 246 247
 			248 249 250 251 252 253 254 255>;
 		default-brightness-level = <200>;
+		power-supply = <&lcd_pwr>;
 	};
 
 	display_subsystem: display-subsystem {
@@ -268,9 +269,9 @@
 	status = "okay";
 	clock-frequency = <400000>;
 
-	vdd_npu: tcs4525@1c {
-		compatible = "tcs,tcs452x";
-		reg = <0x1c>;
+	vdd_npu: syr827@40 {
+		compatible = "silergy,syr827";
+		reg = <0x40>;
 		vin-supply = <&vcc5v0_sys>;
 		regulator-compatible = "fan53555-reg";
 		pinctrl-0 = <&vsel_gpio>;
@@ -560,7 +561,7 @@
 
 &i2c1 {
 	status = "okay";
-
+/*
 	gt1x: gt1x@14 {
 		compatible = "goodix,gt1x";
 		reg = <0x14>;
@@ -568,6 +569,7 @@
 		goodix,rst-gpio = <&gpio0 RK_PB4 GPIO_ACTIVE_HIGH>;
 		goodix,irq-gpio = <&gpio0 RK_PB5 IRQ_TYPE_LEVEL_LOW>;
 	};
+*/
 };
 
 &i2c4 {
