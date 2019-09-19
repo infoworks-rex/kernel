@@ -72,7 +72,6 @@
 			39 10 06 ff ff 98 06 04 01
 			15 10 02 08 10
 			15 10 02 21 01
-
 			15 10 02 60 07
 			15 10 02 61 06
 			15 10 02 63 04
@@ -213,18 +212,13 @@
 			};
 		};
 	};
-};
-
-/* gt1x gtp disable */
-&i2c1 {
-	status = "disabled";
+	
 };
 
 &i2c3 {
 	status = "okay";
 
 	clock-frequency = <100000>;
-
 	imx327: imx327@1a {
 		status = "disabled";
 		compatible = "sony,imx327";
@@ -250,9 +244,8 @@
 	};
 };
 
-/* Not connected */
 &i2c4 {
-	status = "disabled";
+	status = "okay";
 };
 
 &pdm {
@@ -270,17 +263,17 @@
 };
 
 &mipi_dphy {
-	status = "disabled";
+	status = "okay";
 };
 
 &mipi_dphy_rx {
-	status = "disabled";
-
+	status = "okay";
 	ports {
 		#address-cells = <1>;
 		#size-cells = <0>;
 
 		port@0 {
+			status = "disabled";
 			reg = <0>;
 			#address-cells = <1>;
 			#size-cells = <0>;
@@ -305,6 +298,7 @@
 	};
 };
 
+
 &rk_rga {
 	status =  "okay";
 };
@@ -314,7 +308,7 @@
 };
 
 &rkisp1 {
-	status = "okay";
+	status = "disabled";
 
 	port {
 		#address-cells = <1>;
@@ -331,13 +325,8 @@
 	status = "okay";
 };
 
-&rockchip_suspend {
-	status = "okay";
-	rockchip,sleep-debug-en = <1>;
-};
-
 &route_dsi {
-	status = "disabled";
+	status = "okay";
 };
 
 &tsadc {
