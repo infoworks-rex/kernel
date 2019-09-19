@@ -226,6 +226,7 @@
 	clock-frequency = <100000>;
 
 	imx327: imx327@1a {
+		status = "disabled";
 		compatible = "sony,imx327";
 		reg = <0x1a>;
 		clocks = <&cru SCLK_CIF_OUT>;
