@@ -2555,6 +2555,14 @@ static void vop_update_csc(struct drm_crtc *crtc)
 	else
 		VOP_CTRL_SET(vop, dsp_data_swap, 0);
 
+//TODO : Set RGB666 if using RK616 (No force RGB666, Selectable format)
+#if 1
+	s->output_mode = ROCKCHIP_OUT_MODE_P666; 
+	VOP_CTRL_SET(vop, out_mode, s->output_mode); 
+
+	VOP_CTRL_SET(vop, dither_down_en, 1);   
+	VOP_CTRL_SET(vop, dither_down_mode, RGB888_TO_RGB666);
+#else
 	VOP_CTRL_SET(vop, out_mode, s->output_mode);
 
 	switch (s->bus_format) {
@@ -2589,7 +2597,7 @@ static void vop_update_csc(struct drm_crtc *crtc)
 		VOP_CTRL_SET(vop, pre_dither_down_en, 0);
 		break;
 	}
-
+#endif
 	VOP_CTRL_SET(vop, pre_dither_down_en,
 		     s->output_mode == ROCKCHIP_OUT_MODE_AAAA ? 0 : 1);
 	VOP_CTRL_SET(vop, dither_down_sel, DITHER_DOWN_ALLEGRO);
