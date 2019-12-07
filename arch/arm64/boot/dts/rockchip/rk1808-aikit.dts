@@ -33,6 +33,24 @@
 	};
 };
 
+// if using SPI1 M0, must disable UART4
+
+&spi1 {
+	status = "okay";
+	dma-names = "tx", "rx";
+//	max‐freq = <50000000>;
+
+	spi_test@00 {
+		compatible = "rockchip,spidev";
+		reg = <0>;
+		spi-max-frequency = <5000000>;
+	};
+};
+
+&uart4 {
+	status = "disabled";
+};
+
 &adc_key {
 	status = "disabled";
 
