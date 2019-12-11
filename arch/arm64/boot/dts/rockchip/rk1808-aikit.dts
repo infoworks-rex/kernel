@@ -32,13 +32,40 @@
 		rockchip,codec = <&vad>;
 	};
 };
+/*
++-----+--------+------+---GPIO---+------+--------+-----+
+|     |  Name  | Mode | Physical | Mode |  Name  |     |
++-----+--------+------+----++----+------+--------+-----+
+|     |   3.3V |      |  1 || 2  |      | 5.0V   |     |
+|     |  SCL.3 |      |  3 || 4  |      | 5.0V   |     |
+|     |  SDA.3 |      |  5 || 6  |      | GND    |     |
+|     | IO2.B0 |      |  7 || 8  |      | TxD.1  |     |
+|     |    GND |      |  9 || 10 |      | RxD.1  |     |
+|     | IO2.B1 |      | 11 || 12 |      | IO4.A6 |     |
+|     | IO2.B4 |      | 13 || 14 |      | GND    |     |
+|     | IO2.B5 |      | 15 || 16 |      | IO4.A7 |     |
+|     |   3.3V |      | 17 || 18 |      | IO4.B2 |     |
+|     |   MOSI |      | 19 || 20 |      | GND    |     |
+|     |   MISO |      | 21 || 22 |      | IO4.B3 |     |
+|     |   SCLK |      | 23 || 24 |      | CE0    |     |
+|     |    GND |      | 25 || 26 |      | CE1    |     |
+|     |  SDA.2 |      | 27 || 28 |      | SCL.2  |     |
+|     | IO2.B6 |      | 29 || 30 |      | GND    |     |
+|     | IO2.B7 |      | 31 || 32 |      | IO1.B6 |     |
+|     | IO1.B7 |      | 33 || 34 |      | GND    |     |
+|     | IO2.B4 |      | 35 || 36 |      | ADC.1  |     |
+|     |  ADC.0 |      | 37 || 38 |      | IO2.C0 |     |
+|     |    GND |      | 39 || 40 |      | IO2.C1 |     |
++-----+--------+------+----++----+------+--------+-----+
+|     |  Name  | Mode | Physical | Mode |  Name  |     |
++-----+--------+------+---GPIO---+------+--------+-----+
 
+*/
 // if using SPI1 M0, must disable UART4
 
 &spi1 {
 	status = "okay";
 	dma-names = "tx", "rx";
-//	max‐freq = <50000000>;
 
 	spi_test@00 {
 		compatible = "rockchip,spidev";
@@ -47,25 +74,18 @@
 	};
 };
 
+&uart1 {
+	status = "okay";
+	pinctrl-names = "default";
+	pinctrl-0 = <&uart1m0_xfer>; /* GPIO4 PB0,PB1 */
+};
+
 &uart4 {
 	status = "disabled";
 };
 
 &adc_key {
 	status = "disabled";
-
-	vol-down-key {
-		linux,code = <KEY_VOLUMEDOWN>;
-		label = "volume down";
-		press-threshold-microvolt = <300000>;
-	};
-
-	vol-up-key {
-		linux,code = <KEY_VOLUMEUP>;
-		label = "volume up";
-		press-threshold-microvolt = <18000>;
-	};
-
 };
 
 &display_subsystem {
@@ -99,6 +119,16 @@
 			};
 		};
 	};
+};
+
+&i2c2 {
+	status = "okay";
+	pinctrl-names = "default";
+	pinctrl-0 = <&i2c2m1_xfer>;
+};
+
+&i2c3 {
+	status = "okay";
 };
 
 &i2c4 {
@@ -193,35 +223,7 @@
 				};
 			};
 		};
-/*
-		vif {
-			compatible = "rockchip,rk618-vif";
-			clocks = <&clock VIF0_CLK>, <&clock VIF0_PRE_CLK>;
-			clock-names = "vif", "vif_pre";
-			status = "okay";
 
-			ports {
-				#address-cells = <1>;
-				#size-cells = <0>;
-
-				port@0{
-					reg = <0>;
-
-					vif_in_rgb: endpoint {
-						remote-endpoint = <&rgb_out_vif>;
-					};
-				};
-
-				port@1 {
-					reg = <1>;
-
-					vif_out_rgb: endpoint{
-						remote-endpoint = <&rgb_in_vif>;
-					};
-				};
-			};
-		};
-*/
 		rgb {
 			compatible = "rockchip,rk618-rgb";
 			clocks = <&clock RGB_CLK>;
@@ -293,22 +295,12 @@
 						pixelclk-active = <0>;
 					};
 				};
-		
-		//		port {
-		//			panel_in_rgb: endpoint{
-		//				remote-endpoint = <&rgb_out_panel>;
-		//			};
-		//		};
 			};
 
 
    ports {
       port@1 {
          reg = <1>;
-
-//			rgb_out_panel: endpoint {
-//				remote-endpoint = <&panel_in_rgb>;	
-//			};
 
          port_out_rgb: endpoint {
            remote-endpoint = <&rgb_in_rgb_bridge>;
@@ -334,22 +326,6 @@
 
 &i2s0 {
 	status = "disabled";
-
-	pinctrl-0 = <&i2s0_8ch_sclktx
-              &i2s0_8ch_sclkrx
-              &i2s0_8ch_lrcktx
-              &i2s0_8ch_lrckrx
-              &i2s0_8ch_sdi0
-              &i2s0_8ch_sdi1
-              &i2s0_8ch_sdi2
-              &i2s0_8ch_sdi3
-              &i2s0_8ch_sdo0
-              &i2s0_8ch_sdo1
-              &i2s0_8ch_sdo2
-              &i2s0_8ch_sdo3
-				  &i2s0_8ch_mclk>;
-
-	#sound-dai-cells = <0>;
 };
 
 &i2s1 {
@@ -452,17 +428,9 @@
 	rockchip,grf = <&grf>;
 };
 
-//&dsi {
-//	status = "disabled";
-//};
-
 &vop_lite_out_dsi {
 	status = "disabled";
 };
-
-//&vop_raw {
-//	status = "disabled";
-//};
 
 &vopl_mmu {
 	status = "okay";
