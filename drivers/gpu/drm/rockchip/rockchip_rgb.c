@@ -174,6 +174,9 @@ rockchip_rgb_encoder_atomic_check(struct drm_encoder *encoder,
 	else
 		s->bus_format = MEDIA_BUS_FMT_RGB888_1X24;
 
+	//TODO : Set RGB666 if using RK616 (No force RGB666, Selectable format)
+	s->bus_format = MEDIA_BUS_FMT_RGB666_1X18;
+
 	switch (s->bus_format) {
 	case MEDIA_BUS_FMT_RGB666_1X18:
 		s->output_mode = ROCKCHIP_OUT_MODE_P666;
